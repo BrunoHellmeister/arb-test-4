@@ -64,7 +64,7 @@ function retirarRequerente() {
   }
 
   contratoComSignatario
-    .retirarRequerente($("#_enderecoRequerente").val()
+    .retirarRequerente($("#_enderecoRequerente").val())
     .then((transacao) => {
       $("#descricaoStatusTransacoes").html("Transação enviada. Aguarde pela mineração...");
       $("#statusTransacoes").toggle();
@@ -111,7 +111,7 @@ function registrarRequerida() {
   }
 
   contratoComSignatario
-    .registrarRequerente($("#_enderecoRequerida").val()
+    .registrarRequerente($("#_enderecoRequerida").val())
     .then((transacao) => {
       $("#descricaoStatusTransacoes").html("Transação enviada. Aguarde pela mineração...");
       $("#statusTransacoes").toggle();
@@ -157,7 +157,7 @@ function retirarRequerida() {
   }
 
   contratoComSignatario
-    .retirarRequerida($("#_enderecoRequerida").val()
+    .retirarRequerida($("#_enderecoRequerida").val())
     .then((transacao) => {
       $("#descricaoStatusTransacoes").html("Transação enviada. Aguarde pela mineração...");
       $("#statusTransacoes").toggle();
@@ -188,62 +188,36 @@ function retirarRequerida() {
 //rascunho
   
 function enviaVoto(_opcaoDesejada) {
-    $("#descricaoStatusTransacoes").html("Transação enviada. Aguarde pela mineração...");
-    $("#statusTransacoes").show();
-    contratoComSignatario
-      .votar(_opcaoDesejada)
-      .then((transacao) => {
-        transacao
-          .wait()
-          .then((resultado) => {
-            console.log("enviaVoto - o resultado foi ", resultado);
-            if (resultado.status === 1) {
-              $("#descricaoStatusTransacoes").html("Voto computado. Obrigado.");
-              $("#btnOpcao1").prop("disabled", true);
-              $("#btnOpcao2").prop("disabled", true);
-            } else {
-              $("#descricaoStatusTransacoes").html("Houve um erro no voto: " + resultado);
-            }
-          })
-          .catch((err) => {
-            console.error("enviaVoto - a transação foi minerada e houve um erro. Veja abaixo");
-            console.error(err);
-            $("#descricaoStatusTransacoes").html("Algo saiu errado: " + err.message);
-          });
-      })
-      .catch((err) => {
-        console.error("enviaVoto - tx só foi enviada");
-        console.error(err);
-        $("#descricaoStatusTransacoes").html("Algo saiu errado antes de enviar ao Ethereum: " + err.message);
-      });
-  }
+  $("#descricaoStatusTransacoes").html("Transação enviada. Aguarde pela mineração...");
+  $("#statusTransacoes").show();
   contratoComSignatario
-    .registrarRequerente($("#_endereco").val(), $("#_nomeProprietario").val(), $("#_valorVenal").val() * 1)
+    .votar(_opcaoDesejada)
     .then((transacao) => {
-      $("#descricaoStatusTransacoes").html("Transação enviada. Aguarde pela mineração...");
-      $("#statusTransacoes").toggle();
       transacao
         .wait()
         .then((resultado) => {
-          console.log("registraImovel - o resultado foi ", resultado);
+          console.log("enviaVoto - o resultado foi ", resultado);
           if (resultado.status === 1) {
-            $("#descricaoStatusTransacoes").html("Transação executada.");
+            $("#descricaoStatusTransacoes").html("Voto computado. Obrigado.");
+            $("#btnOpcao1").prop("disabled", true);
+            $("#btnOpcao2").prop("disabled", true);
           } else {
-            $("#descricaoStatusTransacoes").html("Houve um erro na execução da transação no Ethereum.");
+            $("#descricaoStatusTransacoes").html("Houve um erro no voto: " + resultado);
           }
         })
         .catch((err) => {
-          console.error("registraImovel - a transação foi minerada e houve um erro. Veja abaixo");
+          console.error("enviaVoto - a transação foi minerada e houve um erro. Veja abaixo");
           console.error(err);
           $("#descricaoStatusTransacoes").html("Algo saiu errado: " + err.message);
         });
     })
     .catch((err) => {
-      console.error("registraImovel - tx só foi enviada");
+      console.error("enviaVoto - tx só foi enviada");
       console.error(err);
       $("#descricaoStatusTransacoes").html("Algo saiu errado antes de enviar ao Ethereum: " + err.message);
     });
 }
+
   
 
 function salvarRegistro() {
